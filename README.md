@@ -1,71 +1,99 @@
-# RAMUS
+# 🔧 Установка Ramus на macOS
 
-### Project by Vitaliy Yakovchuk
+Это руководство поможет вам установить и запустить Ramus на macOS.
 
-![Project Image](https://github.com/user-attachments/assets/72c8fcad-d8f1-4bc1-9186-ae4a1f1c9cf2)
+## 📋 Основная установка
 
-**Java-based IDEF0 & DFD Modeler**
-
-<img width="1792" alt="Screenshot 2019-11-18 at 11 14 26" src="https://user-images.githubusercontent.com/2261228/69039713-23c56d00-09f5-11ea-99c5-b6714efe3037.png">
-
-<img width="1792" alt="Screenshot 2019-11-18 at 11 14 59" src="https://user-images.githubusercontent.com/2261228/69039723-27f18a80-09f5-11ea-9a8d-508069ce7bbd.png">
-
----
-
-## How to Start the Application
-
-### Step 1: Install JDK
-
-Download and install the [Oracle JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
-
-### Step 2: Run the Application
-
-In the console, navigate to the project folder and run:
+Выполните следующие команды в Терминале по порядку:
 
 ```bash
+# 1. Клонируем репозиторий
+git clone https://github.com/Vitaliy-Yakovchuk/ramus.git
+
+# 2. Переходим в папку проекта
+cd ramus
+
+# 3. Устанавливаем Homebrew (если не установлен)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 4. Добавляем Homebrew в PATH
+export PATH="/opt/homebrew/bin:$PATH"
+
+# 5. Устанавливаем OpenJDK 11
+brew install openjdk@11
+
+# 6. Добавляем Java в PATH
+export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
+
+# 7. Устанавливаем JAVA_HOME
+export JAVA_HOME="/opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home"
+
+# 8. Обновляем конфигурацию shell
+source ~/.zshrc
+
+# 9. Запускаем приложение
 ./gradlew runLocal
 ```
 
-### Step 3: Test the Application
+## 🔧 Устранение неполадок
 
-#### For Linux (Tested on Ubuntu 20.04 and Fedora 34)
+### Проблема с зависимостью `docking-frames-common`
 
-1. **Clone the Repository:**
+Если возникает ошибка `'org.dockingframes:docking-frames-common:1.1.2-SNAPSHOT'`:
 
-   ```bash
-   git clone https://github.com/Vitaliy-Yakovchuk/ramus.git
+1. **Откройте Finder** и перейдите в папку `ramus`
+2. **Перейдите** в папку `gui-framework-core`
+3. **Откройте** файл `build.gradle` в приложении TextEdit
+4. **Измените** строку:
+   ```gradle
+   # Было:
+   implementation 'org.dockingframes:docking-frames-common:1.1.2-SNAPSHOT'
+   
+   # Стало:
+   implementation 'org.dockingframes:docking-frames-common:1.1.1'
    ```
-
-2. **Navigate to the Project Folder:**
-
+5. **Сохраните** файл
+6. **Вернитесь** в Терминал и перейдите в папку `ramus`:
    ```bash
    cd ramus
-   ```
-
-3. **Run the Application:**
-
-   ```bash
    ./gradlew runLocal
    ```
 
-### Optional: Create a Shortcut to Launch the Application
+### Проблема с версией Java
 
-1. Open your `.bash_aliases` file:
+Если установлена другая версия Java и она постоянно меняется:
+
+1. **Откройте** конфигурационный файл:
    ```bash
-   nano ~/.bash_aliases
+   nano ~/.zshrc
    ```
 
-2. Add the following alias to easily launch the application:
-
+2. **Найдите** строку:
    ```bash
-   alias ramus='cd ~/path/to/ramus/folder/ && ./gradlew runLocal &'
+   export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+   ```
+   
+3. **Измените** версию с `17` на `11`:
+   ```bash
+   export JAVA_HOME=$(/usr/libexec/java_home -v 11)
    ```
 
-3. Save the file and reload it:
+4. **Сохраните** изменения:
+   - Нажмите `Ctrl + X`
+   - Нажмите `Y`
+   - Нажмите `Enter`
 
+5. **Запустите** приложение:
    ```bash
-   source ~/.bash_aliases
+   cd ramus
+   ./gradlew runLocal
    ```
 
-4. Now, you can simply run `ramus` in the terminal to launch the application.
+## ⚡ Быстрый старт
 
+После первоначальной настройки для запуска Ramus достаточно:
+
+```bash
+cd ramus
+./gradlew runLocal
+```
